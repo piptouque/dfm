@@ -246,7 +246,7 @@ class Profile:  # pylint: disable=too-many-instance-attributes
         name = config.get("name", get_name(config["repo"]))
         location = os.path.expanduser(config.pop("location", ""))
         if not location:
-            module_dir = os.path.join(dfm_dir(), "modules")
+            module_dir = os.path.join(dfm_dir(config.get("system")), "modules")
             if not os.path.isdir(module_dir):
                 os.makedirs(module_dir)
             location = os.path.join(module_dir, name)

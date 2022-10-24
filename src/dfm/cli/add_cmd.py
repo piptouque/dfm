@@ -13,8 +13,9 @@ from dfm.cli.utils import inject_profile
 
 
 @inject_profile
-def run(args, profile=None):
+def run(working_dir, args, profile=None):
     """Run the add command with args."""
+    # TODO: use working_dir somehow
     for filename in args["<file>"]:
         oldfile = os.path.abspath(filename)
         if not os.path.exists(oldfile):
@@ -22,7 +23,9 @@ def run(args, profile=None):
             sys.exit(1)
 
         newfile = os.path.relpath(oldfile, profile.link_manager.target_dir)
+        print(oldfile, profile.link_manager.target_dir, newfile)
         newfile = os.path.join(profile.link_manager.where, newfile)
+        print(newfile)
         if os.path.isfile(oldfile):
             shutil.copy2(oldfile, newfile)
             os.remove(oldfile)

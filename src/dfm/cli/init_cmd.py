@@ -7,13 +7,13 @@ Create a profile with the given name.
 import os
 import sys
 
-from dfm.config import dfm_dir
+# from dfm.config import dfm_dir
 from dfm.profile import Profile
 
 
-def run(args):
+def run(working_dir, args):
     """Create a new Profile with the given name."""
-    new_profile_dir = os.path.join(dfm_dir(), "profiles", args["<name>"])
+    new_profile_dir = os.path.join(working_dir, "profiles", args["<name>"])
 
     try:
         os.makedirs(new_profile_dir)

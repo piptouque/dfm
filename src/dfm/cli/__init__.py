@@ -12,6 +12,7 @@ Options:
     -v, --verbose  If provided print more logging info
     --debug        If provided print debug level logging info
     -h, --help     Print this help information
+    --system       Manage system-wide dotfiles, in `/etc` on linux
 
 Commands:
     help           Print usage information about dfm commands
@@ -37,6 +38,7 @@ from importlib import import_module
 from docopt import docopt
 
 from dfm import __version__
+from dfm.config import dfm_dir
 
 ALIASES = {
     "s": "sync",
@@ -76,6 +78,8 @@ def main():
             level=logging.INFO,
         )
 
+    working_dir = dfm_dir(args["--system"])
+
     logger = logging.getLogger(__name__)
 
     command = args["<command>"]
@@ -92,7 +96,7 @@ def main():
         command = ALIASES.get(command, command)
         command_mod = import_module("dfm.cli.{}_cmd".format(command))
         argv = [command] + args["<args>"]
-        command_mod.run(docopt(command_mod.__doc__, argv=argv))
+        command_mod.run(working_dir, docopt(command_mod.__doc__, argv=argv))
         sys.exit(0)
     except ImportError as exc:
         print("{} is not a known dfm command.".format(command))
